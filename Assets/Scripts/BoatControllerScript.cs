@@ -19,9 +19,20 @@ public class BoatControllerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Balance ();
-		Movement ();
-		Steer ();
-	}
+        verticalInput = Input.GetAxis("Vertical");
+        movementFactor = Mathf.Lerp(movementFactor, verticalInput, Time.deltaTime / movementThresold);
+        transform.Translate(0.0f, 0.0f, movementFactor * speed);
+
+
+
+        horizontalInput = Input.GetAxis("Horizontal");
+        steerFactor = Mathf.Lerp(steerFactor, horizontalInput * verticalInput, Time.deltaTime / movementThresold);
+        transform.Rotate(0.0f, steerFactor * steerSpeed, 0.0f);
+
+        Vector3 speed1 = new Vector3(horizontalInput, 0, verticalInput);
+        speed1 = transform.rotation * speed1;
+
+    }
 
 	void Balance () {
 		if (!m_COM) {
@@ -33,15 +44,7 @@ public class BoatControllerScript : MonoBehaviour {
 		GetComponent<Rigidbody> ().centerOfMass = m_COM.position;
 	}
 
-	void Movement () {
-		verticalInput = Input.GetAxis ("Vertical");
-		movementFactor = Mathf.Lerp (movementFactor, verticalInput, Time.deltaTime / movementThresold);
-		transform.Translate (0.0f, 0.0f, movementFactor * speed);
-	}
 
-	void Steer () {
-		horizontalInput = Input.GetAxis ("Horizontal");
-		steerFactor = Mathf.Lerp (steerFactor, horizontalInput * verticalInput, Time.deltaTime / movementThresold);
-		transform.Rotate (0.0f, steerFactor * steerSpeed, 0.0f);
-	}
+		
+	
 }
